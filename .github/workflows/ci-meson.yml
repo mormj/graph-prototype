@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: "${{ matrix.configurations.name }} | ${{ matrix.cmake-build-type }}"
+    name: "${{ matrix.configurations.name }} | ${{ matrix.meson-build-type }}"
     environment: configure coverage
     runs-on: ${{ matrix.configurations.os }}
     strategy:
@@ -30,7 +30,7 @@ jobs:
             os: ubuntu-22.04 # pre-release, ubuntu-latest still points to ubuntu-2004
             compiler: emscripten
         # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-        cmake-build-type: [ Release, Debug ]
+        meson-build-type: [ release, debug ]
 
     steps:
     - uses: actions/checkout@v2
@@ -43,7 +43,7 @@ jobs:
         cache-name: cache-fetchContent-cache
       with:
         path: ${{runner.workspace}}/build/_deps
-        key: ${{ runner.os }}-${{ matrix.configurations.compiler }}-${{ matrix.cmake-build-type }}-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('cmake/Dependencies.cmake') }}
+        key: ${{ runner.os }}-${{ matrix.configurations.compiler }}-${{ matrix.meson-build-type }}-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('cmake/Dependencies.cmake') }}
 
     - name: Install gcc-12
       if: matrix.configurations.compiler == 'gcc'
@@ -102,19 +102,19 @@ jobs:
     - name: Configure Meson
       if: matrix.configurations.compiler != 'emscripten'
       shell: bash
-      run: meson setup ../build --buildtype=${{matrix.cmake-build-type}} -DENABLE_COVERAGE=${{ matrix.configurations.name == env.REFERENCE_CONFIG &&  matrix.cmake-build-type == 'Debug'}}
+      run: meson setup ../build --buildtype=${{matrix.meson-build-type}} -DENABLE_COVERAGE=${{ matrix.configurations.name == env.REFERENCE_CONFIG &&  matrix.meson-build-type == 'Debug'}}
 
     # - name: Configure Meson Emscripten
     #   if: matrix.configurations.compiler == 'emscripten'
     #   shell: bash
     #   run: |
     #     source ~/emsdk/emsdk_env.sh
-    #     meson setup ../build -DEMSCRIPTEN --buildtype=${{ matrix.cmake-build-type }} -DENABLE_COVERAGE=OFF
+    #     meson setup ../build -DEMSCRIPTEN --buildtype=${{ matrix.meson-build-type }} -DENABLE_COVERAGE=OFF
 
     - name: Build
       if: matrix.configurations.compiler != 'emscripten'
       shell: bash
-      run: cmake --build ../build --config ${{ matrix.cmake-build-type }}
+      run: cmake --build ../build --config ${{ matrix.meson-build-type }}
 
     # - name: Build Emscripten
     #   if: matrix.configurations.compiler == 'emscripten'
