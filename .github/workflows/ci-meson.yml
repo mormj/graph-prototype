@@ -114,7 +114,7 @@ jobs:
     - name: Build
       if: matrix.configurations.compiler != 'emscripten'
       shell: bash
-      run: cmake --build ../build --config ${{ matrix.meson-build-type }}
+      run: cd ../build && ninja
 
     # - name: Build Emscripten
     #   if: matrix.configurations.compiler == 'emscripten'
