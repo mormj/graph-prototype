@@ -102,7 +102,7 @@ jobs:
     - name: Configure Meson
       if: matrix.configurations.compiler != 'emscripten'
       shell: bash
-      run: meson setup ../build --buildtype=${{matrix.meson-build-type}} -DENABLE_COVERAGE=${{ matrix.configurations.name == env.REFERENCE_CONFIG &&  matrix.meson-build-type == 'Debug'}}
+      run: meson setup ../build --buildtype=${{matrix.meson-build-type}}
 
     # - name: Configure Meson Emscripten
     #   if: matrix.configurations.compiler == 'emscripten'
