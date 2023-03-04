@@ -96,7 +96,7 @@ jobs:
       if: matrix.configurations.compiler != 'emscripten'
       shell: bash
       run: |-
-        sudo apt install python3-pip
+        sudo apt install python3-pip ninja-build
         pip install meson
 
     - name: Configure Meson
