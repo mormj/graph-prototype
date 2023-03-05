@@ -29,7 +29,7 @@ jobs:
           - name: Ubuntu Latest emscripten
             os: ubuntu-22.04 # pre-release, ubuntu-latest still points to ubuntu-2004
             compiler: emscripten
-        # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+        # Customize the meson build type here (Release, Debug, RelWithDebInfo, etc.)
         meson-build-type: [ release, debug ]
 
     steps:
@@ -102,14 +102,14 @@ jobs:
     - name: Configure Meson
       if: matrix.configurations.compiler != 'emscripten'
       shell: bash
-      run: meson setup ../build --buildtype=${{matrix.meson-build-type}}
+      run: meson setup ../build --buildtype=${{matrix.meson-build-type}} -Db_coverage=${{ matrix.configurations.name == env.REFERENCE_CONFIG &&  matrix.meson-build-type == 'debug'}}
 
     # - name: Configure Meson Emscripten
     #   if: matrix.configurations.compiler == 'emscripten'
     #   shell: bash
     #   run: |
     #     source ~/emsdk/emsdk_env.sh
-    #     meson setup ../build -DEMSCRIPTEN --buildtype=${{ matrix.meson-build-type }} -DENABLE_COVERAGE=OFF
+    #     meson setup ../build -DEMSCRIPTEN --buildtype=${{ matrix.meson-build-type }} -Db_coverage=false
 
     - name: Build
       if: matrix.configurations.compiler != 'emscripten'

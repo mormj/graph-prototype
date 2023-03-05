@@ -1,1 +1,2 @@
 option('enable_testing', type : 'boolean', value : true, description : 'Enable Testing and Benchmarks')
+option('emscripten', type : 'boolean', value : false, description : 'Emscripten Build')
