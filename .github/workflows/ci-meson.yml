@@ -89,7 +89,6 @@ jobs:
         EOF
 
     - name: Install Meson
-      if: matrix.configurations.compiler != 'emscripten'
       shell: bash
       run: |-
         sudo apt install python3-pip ninja-build
