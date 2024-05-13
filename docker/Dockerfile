@@ -41,30 +41,30 @@ RUN apt-get update -y \
 #    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
 #    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
 #    apt-get -qqy update && \
-RUN apt-get update -y \
-    && apt-get --no-install-recommends -qqy install git unzip curl wget bash fonts-dejavu python3 python3-pip shellcheck nodejs openjdk-17-jre-headless \
-    && curl -fsSL -o /opt/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip \
-    && unzip /opt/sonar-scanner-cli.zip \
-    && rm /opt/sonar-scanner-cli.zip \
-    && mv sonar-scanner-${SONAR_SCANNER_VERSION}-linux ${SONAR_SCANNER_HOME} \
-    && pip install --no-cache-dir --break-system-packages pylint \
-    && mkdir -p "${SRC_PATH}" "${SONAR_USER_HOME}" "${SONAR_USER_HOME}/cache" \
-    && chmod -R 555 "${SONAR_SCANNER_HOME}" && chmod -R 777 $SONAR_USER_HOME \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update -y \
+#     && apt-get --no-install-recommends -qqy install git unzip curl wget bash fonts-dejavu python3 python3-pip shellcheck nodejs openjdk-17-jre-headless \
+#     && curl -fsSL -o /opt/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip \
+#     && unzip /opt/sonar-scanner-cli.zip \
+#     && rm /opt/sonar-scanner-cli.zip \
+#     && mv sonar-scanner-${SONAR_SCANNER_VERSION}-linux ${SONAR_SCANNER_HOME} \
+#     && pip install --no-cache-dir --break-system-packages pylint \
+#     && mkdir -p "${SRC_PATH}" "${SONAR_USER_HOME}" "${SONAR_USER_HOME}/cache" \
+#     && chmod -R 555 "${SONAR_SCANNER_HOME}" && chmod -R 777 $SONAR_USER_HOME \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
 
-# install emscripten sdk
-RUN apt-get update -y \
-    && apt-get install --no-install-recommends -qqy bzip2 xz-utils \
-    && mkdir -p $EMSDK_HOME \
-    && git clone --depth=1 https://github.com/emscripten-core/emsdk.git $EMSDK_HOME \
-    && cd $EMSDK_HOME \
-    && ./emsdk install $EMSDK_VERSION \
-    && ./emsdk activate $EMSDK_VERSION \
-    && npm install --ignore-scripts -g xhr2 \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && chown -R root:users $EMSDK_HOME && chmod -R 777 $EMSDK_HOME
+# # install emscripten sdk
+# RUN apt-get update -y \
+#     && apt-get install --no-install-recommends -qqy bzip2 xz-utils \
+#     && mkdir -p $EMSDK_HOME \
+#     && git clone --depth=1 https://github.com/emscripten-core/emsdk.git $EMSDK_HOME \
+#     && cd $EMSDK_HOME \
+#     && ./emsdk install $EMSDK_VERSION \
+#     && ./emsdk activate $EMSDK_VERSION \
+#     && npm install --ignore-scripts -g xhr2 \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/* \
+#     && chown -R root:users $EMSDK_HOME && chmod -R 777 $EMSDK_HOME
 
 USER user
 ENTRYPOINT ["/bin/bash", "-l", "-c"]
